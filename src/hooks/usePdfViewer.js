@@ -15,7 +15,7 @@ export default function usePdfViewer() {
     const [fileName, setFileName] = useState('No file selected');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isDark, setIsDark] = useState(true);
+    const [isDark, setIsDark] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [pdfLoaded, setPdfLoaded] = useState(false);
 

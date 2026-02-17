@@ -24,14 +24,14 @@ export default function DropZone({ onFileSelect, visible }) {
             onDrop={handleDrop}
         >
             <div className="drop-message">
-                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{ color: 'var(--accent)', marginBottom: '0.5rem' }}>
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="12" y1="18" x2="12" y2="12" />
-                    <polyline points="9 15 12 12 15 15" />
+                <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" style={{ color: 'var(--accent)', marginBottom: '0.75rem' }}>
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    <line x1="12" y1="8" x2="12" y2="14" />
+                    <polyline points="9 11 12 8 15 11" />
                 </svg>
-                <h2>Open a PDF File</h2>
-                <p>Drag & drop your PDF here, or browse from your device</p>
+                <h2>Open Your Study Material</h2>
+                <p>Drop your notes, PDFs or assignments here — start reading instantly</p>
                 <input
                     ref={fileInputRef}
                     type="file"
