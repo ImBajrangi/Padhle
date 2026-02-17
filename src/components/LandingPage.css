@@ -1,12 +1,11 @@
-/* ═══════════════════════════════════════════
-   PadhLe Landing Page — Market-Ready Design
-   
-   Color System:
-   - Primary   : Deep Indigo #4F46E5 (trust, education, professionalism)
-   - Accent    : Vibrant Amber #F59E0B (warmth, energy, Snapchat-inspired)
-   - Surface   : Clean white + subtle warm grey
-   - Text      : Near-black for readability, soft grey for secondary
-   ═══════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
 /* ── Base ── */
 .lp {
