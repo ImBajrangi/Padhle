@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import usePdfViewer from './hooks/usePdfViewer';
 import Header from './components/Header';
 import Toolbar from './components/Toolbar';
@@ -8,10 +8,17 @@ import Sidebar from './components/Sidebar';
 import Loader from './components/Loader';
 import ErrorModal from './components/ErrorModal';
 import Background from './components/Background';
+import Confetti from './components/Confetti';
 
 export default function App() {
   const fileInputRef = useRef(null);
   const viewer = usePdfViewer();
+  const [confettiKey, setConfettiKey] = useState(0);
+
+  /* Trigger confetti when PDF loads */
+  useEffect(() => {
+    if (viewer.pdfLoaded) setConfettiKey((k) => k + 1);
+  }, [viewer.pdfLoaded]);
 
   return (
     <div className={viewer.isDark ? 'dark-theme' : 'light-theme'}>
@@ -74,6 +81,7 @@ export default function App() {
         />
       </div>
 
+      <Confetti trigger={confettiKey} />
       <Loader visible={viewer.isLoading} />
       <ErrorModal message={viewer.error} onClose={viewer.clearError} />
     </div>
