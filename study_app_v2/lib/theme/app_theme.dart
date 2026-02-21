@@ -2,76 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  // Primary Yellowish Palette (Premium proper)
+  // PadhLe Hub Palette (Emerald Green & Charcoal)
   static const Color primary =
-      Color(0xFFFACC15); // Vibrant Yellow (Home Featured)
+      Color.fromARGB(255, 19, 105, 50); // Vibrant Emerald Green
   static const Color primaryAction =
-      Color(0xFFFBBF24); // Action Color (Buttons)
+      Color.fromARGB(255, 10, 60, 28); // Darker Green for Actions
   static const Color secondary =
-      Color(0xFFD97706); // Amber/Golden (Badges/Text)
+      Color.fromARGB(255, 60, 104, 62); // Soft Green for Accents
 
-  // High-Fidelity Accent Colors
+  // Background & Surface (Deep Mode)
+  static const Color bgDark = Color(0xFF121212); // Deep Charcoal
+  static const Color surface = Color(0xFF1E1E1E); // Material Surface Grey
+  static const Color surfaceDark = Color(0xFF2C2C2C); // Darker Surface Variant
+
+  // Text Tokens
+  static const Color textMain = Color(0xFFFFFFFF); // Pure White
+  static const Color textSecondary = Color(0xFFB0B0B0); // Silver/Grey
+  static const Color textOffWhite = Color(0xFFE0E0E0); // Body Text
+
+  // Legacy/Reference (to be phased out)
   static const Color accentBlue = Color(0xFF3B82F6);
   static const Color accentPurple = Color(0xFFA855F7);
-  static const Color accentOrange = Color(0xFFF97316);
-  static const Color accentGreen = Color(0xFF10B981);
-
-  // Background & Surface
-  static const Color bgLight = Color(0xFFF3F4F6); // Gray-tinted from Stitch
-  static const Color bgCream =
-      Color(0xFFF8F8F5); // Cream-tinted from Selection Wheel
-  static const Color surface = Colors.white;
-
-  // Dark Mode Tokens
-  static const Color bgDark = Color(0xFF111827);
-  static const Color bgWarmDark = Color(0xFF222110);
-  static const Color surfaceDark = Color(0xFF1F2937);
-
-  // Text
-  static const Color textMain = Color(0xFF1E293B);
-  static const Color textSecondary = Color(0xFF64748B);
+  static const Color bgCream = bgDark; // Alias for legacy screens
+  static const Color bgLight = bgDark; // Alias for legacy screens
+  static const Color accentOrange =
+      Color.fromARGB(255, 52, 89, 54); // Alias for legacy screens
 }
 
 class AppTheme {
-  static ThemeData light() {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      primaryColor: AppColors.primary,
-      scaffoldBackgroundColor: AppColors.bgLight,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
-        secondary: AppColors.primaryAction,
-        onPrimary: AppColors.textMain,
-        surface: AppColors.surface,
-        background: AppColors.bgLight,
-      ),
-      // Central typography system
-      textTheme: GoogleFonts.plusJakartaSansTextTheme(const TextTheme(
-        displayLarge: TextStyle(
-            color: AppColors.textMain,
-            fontWeight: FontWeight.w900,
-            letterSpacing: -1.5),
-        headlineMedium: TextStyle(
-            color: AppColors.textMain,
-            fontWeight: FontWeight.bold,
-            letterSpacing: -0.5),
-        bodyLarge: TextStyle(color: AppColors.textMain),
-        bodyMedium: TextStyle(color: AppColors.textSecondary),
-      )),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: IconThemeData(color: AppColors.textMain),
-        titleTextStyle: TextStyle(
-            color: AppColors.textMain,
-            fontSize: 18,
-            fontWeight: FontWeight.bold),
-      ),
-    );
-  }
+  static const double borderRadius = 24.0;
 
   static ThemeData dark() {
     return ThemeData(
@@ -79,15 +38,53 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.bgDark,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        brightness: Brightness.dark,
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
-        surface: AppColors.surfaceDark,
+        secondary: AppColors.primaryAction,
+        surface: AppColors.surface,
         background: AppColors.bgDark,
+        onPrimary: Colors.white,
       ),
-      textTheme:
-          GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme),
+      // Specialized Typography
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.robotoMono(
+          color: AppColors.textMain,
+          fontWeight: FontWeight.bold,
+          fontSize: 32,
+          letterSpacing: -1.0,
+        ),
+        headlineMedium: GoogleFonts.robotoMono(
+          color: AppColors.textMain,
+          fontWeight: FontWeight.w600,
+          fontSize: 24,
+        ),
+        bodyLarge: GoogleFonts.inter(
+          color: AppColors.textOffWhite,
+          fontSize: 16,
+        ),
+        bodyMedium: GoogleFonts.inter(
+          color: AppColors.textSecondary,
+          fontSize: 14,
+        ),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: AppColors.textMain),
+        titleTextStyle: TextStyle(
+          color: AppColors.textMain,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        elevation: 0,
+      ),
     );
   }
 }

@@ -29,14 +29,12 @@ class AchievementProfileScreen extends StatelessWidget {
           SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 100),
-                _buildXPSphere(),
+                const SizedBox(height: 120),
+                _buildProfileHeader(),
                 const SizedBox(height: 40),
                 _buildStatsBentoGrid(),
                 const SizedBox(height: 40),
-                _buildBadgesSection(),
-                const SizedBox(height: 40),
-                _buildLeaderboardPreview(),
+                _buildAchievementsSection(),
                 const SizedBox(height: 120),
               ],
             ),
@@ -46,96 +44,60 @@ class AchievementProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildXPSphere() {
-    return Center(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Outer Glow
-          Container(
-            width: 280,
-            height: 280,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [
-                  AppColors.primary.withOpacity(0.4),
-                  Colors.transparent
-                ],
+  Widget _buildProfileHeader() {
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 140,
+              height: 140,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.primary, width: 4),
+              ),
+              padding: const EdgeInsets.all(4),
+              child: const CircleAvatar(
+                radius: 60,
+                backgroundImage:
+                    NetworkImage('https://i.pravatar.cc/300?u=alex'),
               ),
             ),
-          ),
-          // 3D Sphere Effect (Layered)
-          Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: const RadialGradient(
-                center: Alignment(-0.3, -0.3),
-                colors: [
-                  Color(0xFFFEF9C4),
-                  Color(0xFFFACC15),
-                  Color(0xFFD97706),
-                ],
-                stops: [0.0, 0.6, 1.0],
+            Positioned(
+              right: 2,
+              bottom: 2,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child:
+                    const Icon(Icons.edit, size: 16, color: AppColors.textMain),
               ),
-              boxShadow: [
-                BoxShadow(
-                    color: AppColors.primary.withOpacity(0.5),
-                    blurRadius: 40,
-                    offset: const Offset(0, 20)),
-                BoxShadow(
-                    color: Colors.white.withOpacity(0.5),
-                    blurRadius: 15,
-                    offset: const Offset(-8, -8),
-                    spreadRadius: -2),
-              ],
             ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Inner Shine Overlay
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: Colors.white.withOpacity(0.3), width: 3),
-                  ),
-                ),
-                const Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('2,450',
-                          style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.textMain,
-                              letterSpacing: -2)),
-                      Text('TOTAL XP',
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xFF92400E),
-                              letterSpacing: 1)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        const Text(
+          'Alex Johnson',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w900,
+            color: AppColors.textMain,
+            letterSpacing: -1,
           ),
-          // Floating Icon Elements
-          const Positioned(
-              top: 20,
-              right: 30,
-              child: Text('⚡', style: TextStyle(fontSize: 24))),
-          const Positioned(
-              bottom: 20,
-              left: 30,
-              child: Text('🔥', style: TextStyle(fontSize: 24))),
-        ],
-      ),
+        ),
+        const Text(
+          'University Student • Grade 11',
+          style: TextStyle(
+            fontSize: 14,
+            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 
@@ -247,126 +209,74 @@ class AchievementProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBadgesSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: Text('Achievements',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textMain)),
-        ),
-        const SizedBox(height: 20),
-        SizedBox(
-          height: 140,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            children: [
-              _buildBadgeCard('Early Bird', '🕒', AppColors.accentPurple),
-              _buildBadgeCard('Master', '🎓', AppColors.primary),
-              _buildBadgeCard('Notes King', '📝', AppColors.accentBlue),
-              _buildBadgeCard('Quiz Whiz', '🧠', AppColors.accentOrange),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBadgeCard(String name, String emoji, Color color) {
-    return Container(
-      width: 100,
-      margin: const EdgeInsets.only(right: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: color.withOpacity(0.1)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(emoji, style: const TextStyle(fontSize: 28)),
-          const SizedBox(height: 8),
-          Flexible(
-            child: Text(name,
-                style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textMain),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLeaderboardPreview() {
+  Widget _buildAchievementsSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Leaderboard',
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textMain)),
-              TextButton(
-                  onPressed: () {},
-                  child: const Text('View Rankings',
-                      style: TextStyle(
-                          color: AppColors.primaryAction,
-                          fontWeight: FontWeight.bold))),
-            ],
-          ),
-          const SizedBox(height: 12),
+          const Text('Achievements',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textMain)),
+          const SizedBox(height: 20),
+          _buildAchievementItem(
+              'Elite Scholar',
+              'Top 5% of students in Grade 11',
+              Icons.workspace_premium,
+              AppColors.primary),
+          const SizedBox(height: 16),
+          _buildAchievementItem(
+              'Consistency King',
+              'Maintained 30 day study streak',
+              Icons.local_fire_department,
+              AppColors.primaryAction),
+          const SizedBox(height: 16),
+          _buildAchievementItem(
+              'Quiz Master',
+              'Scored 100% in 5 consecutive quizzes',
+              Icons.psychology,
+              AppColors.accentBlue),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAchievementItem(
+      String title, String desc, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)
+        ],
+      ),
+      child: Row(
+        children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.textMain,
-              borderRadius: BorderRadius.circular(32),
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Row(
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('#4',
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.primary)),
-                const SizedBox(width: 20),
-                const CircleAvatar(
-                    radius: 20,
-                    backgroundImage:
-                        NetworkImage('https://i.pravatar.cc/100?u=alex')),
-                const SizedBox(width: 16),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('You',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                    Text('Top 100 in Grade 11',
-                        style: TextStyle(color: Colors.white54, fontSize: 11)),
-                  ],
-                ),
-                const Spacer(),
-                const Text('980',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 18)),
-                const SizedBox(width: 4),
-                Icon(Icons.bolt, color: AppColors.primary, size: 20),
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textMain)),
+                Text(desc,
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textSecondary)),
               ],
             ),
           ),

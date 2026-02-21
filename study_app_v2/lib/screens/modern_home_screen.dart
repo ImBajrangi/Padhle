@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:study_app/theme/app_theme.dart';
-import 'package:study_app/widgets/premium_effects.dart';
-import 'dart:ui';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../theme/app_theme.dart';
+import '../widgets/bento_card.dart';
 
 class ModernHomeScreen extends StatelessWidget {
   const ModernHomeScreen({super.key});
@@ -9,410 +10,245 @@ class ModernHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
-      body: Stack(
-        children: [
-          // Background decorative orbs
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.15),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Stack(
-              children: [
-                const GrainyTextureOverlay(opacity: 0.03),
-                SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 24),
-                      _buildHeader(),
-                      const SizedBox(height: 32),
-                      _buildFeaturedCard(),
-                      const SizedBox(height: 32),
-                      _buildBentoStatsGrid(),
-                      const SizedBox(height: 32),
-                      _buildRecentActivity(),
-                      const SizedBox(height: 120),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      backgroundColor: AppColors.bgDark,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 80, 24, 120),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            const SizedBox(height: 40),
+            _buildStatusBento(),
+            const SizedBox(height: 32),
+            _buildSectionHeader('Today\'s Focus'),
+            const SizedBox(height: 20),
+            _buildSubjectsBento(),
+            const SizedBox(height: 32),
+            _buildSectionHeader('Daily Assignments'),
+            const SizedBox(height: 20),
+            _buildAssignmentsList(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Sat, 12 Oct',
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Hello, Alex 👋',
-              style: TextStyle(
-                color: AppColors.textMain,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                letterSpacing: -0.5,
-              ),
-            ),
-          ],
-        ),
         Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                  )
-                ],
-              ),
-              child: const Icon(Icons.notifications_outlined,
-                  color: AppColors.textMain, size: 24),
-            ),
-            const SizedBox(width: 12),
-            Container(
-              width: 44,
-              height: 44,
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
+                border: Border.all(color: Colors.white.withOpacity(0.1)),
                 image: const DecorationImage(
                   image: NetworkImage(
-                      'https://lh3.googleusercontent.com/a/default-user'),
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBqUWP7HM6rEHnI5McRApJipQP5ABiMvZt7lTycq939qkZCO7NM8Aqb-aAmcIPCUpm0pib7oQMJh-xCec7v8lpVmCegcqW75UA30TXPusU062bT4alEykfyED8stqFy_Y7Chq8To4Zxt0owfMK2OWN4eKYDqr2Vm786b5CGPWn8jFPboyVUnCR2cgAsIM-11WNXF-IzViRvMVZRIfIO0DopIp_Zwkit7O8FeztCOoD-FmZfx-HxSkdIfIQBv7jp-Q_tUtg5N7GReo4'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/logo.svg',
+                      height: 18,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.primary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'PADHLE HUB',
+                      style: GoogleFonts.robotoMono(
+                        color: AppColors.primary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  'Alex • Grade 11',
+                  style: GoogleFonts.inter(
+                    color: AppColors.textSecondary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            _buildHeaderAction(Icons.search_rounded),
+            const SizedBox(width: 12),
+            _buildHeaderAction(Icons.notifications_none_rounded),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildFeaturedCard() {
+  Widget _buildHeaderAction(IconData icon) {
     return Container(
-      width: double.infinity,
-      height: 200,
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        color: AppColors.surface,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          Positioned(
-            right: -20,
-            bottom: -20,
-            child: Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.accentBlue.withOpacity(0.3),
-                    Colors.transparent
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
+      child: Icon(icon, color: AppColors.textSecondary, size: 20),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: AppColors.textMain,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        ),
+        Text(
+          'View All',
+          style: TextStyle(
+            color: AppColors.primary,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatusBento() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 45,
+          child: BentoCard(
+            title: '14 Days',
+            subtitle: 'Current Streak',
+            icon: Icons.local_fire_department_rounded,
+            accentColor: Colors.orange,
+            height: 140,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          flex: 55,
+          child: BentoCard(
+            title: '2,450',
+            subtitle: 'Total XP Earned',
+            icon: Icons.bolt_rounded,
+            accentColor: AppColors.primary,
+            height: 140,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Text(
-                    'FEATURED TOPIC',
-                    style: TextStyle(
-                      color: AppColors.secondary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Modern\nPhysics',
-                  style: TextStyle(
-                    color: AppColors.textMain,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    height: 1.1,
-                  ),
-                ),
-                const Spacer(),
-                PremiumShineEffect(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.textMain,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Start Learning',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward_rounded, size: 16),
-                      ],
-                    ),
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: 0.7,
+                    backgroundColor: AppColors.primary.withOpacity(0.1),
+                    valueColor: const AlwaysStoppedAnimation(AppColors.primary),
+                    minHeight: 6,
                   ),
                 ),
               ],
             ),
           ),
-          Positioned(
-            right: 20,
-            top: 20,
-            child: const Icon(Icons.psychology_outlined,
-                size: 80, color: AppColors.primary),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBentoStatsGrid() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: _buildStatTile(
-                'This Week',
-                'Activity',
-                Icons.calendar_month_outlined,
-                Colors.white,
-                AppColors.textMain,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: ['M', 'T', 'W', 'T', 'F']
-                      .map((day) => Column(
-                            children: [
-                              Text(day,
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      color: AppColors.textSecondary)),
-                              const SizedBox(height: 4),
-                              Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: day == 'W'
-                                      ? AppColors.textMain
-                                      : Colors.transparent,
-                                ),
-                                child: Center(
-                                    child: Text('12',
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: day == 'W'
-                                              ? Colors.white
-                                              : AppColors.textMain,
-                                          fontWeight: day == 'W'
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-                                        ))),
-                              ),
-                            ],
-                          ))
-                      .toList(),
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              flex: 2,
-              child: _buildStatTile(
-                'Goal',
-                '70%',
-                Icons.track_changes,
-                Colors.white,
-                AppColors.textMain,
-                center: true,
-                child: SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CircularProgressIndicator(
-                    value: 0.7,
-                    strokeWidth: 8,
-                    backgroundColor: AppColors.bgLight,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(AppColors.primary),
-                    strokeCap: StrokeCap.round,
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
       ],
     );
   }
 
-  Widget _buildStatTile(
-      String title, String subtitle, IconData icon, Color bg, Color text,
-      {bool center = false, Widget? child}) {
+  Widget _buildSubjectsBento() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: BentoCard(
+            title: 'Quantum Physics',
+            subtitle: 'Unit 4: Mechanics',
+            icon: Icons.science_rounded,
+            accentColor: AppColors.accentBlue,
+            height: 180,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            children: [
+              BentoCard(
+                title: 'Maths',
+                icon: Icons.functions_rounded,
+                accentColor: AppColors.accentPurple,
+                height: 82,
+              ),
+              const SizedBox(height: 16),
+              BentoCard(
+                title: 'Chemistry',
+                icon: Icons.biotech_rounded,
+                accentColor: AppColors.secondary,
+                height: 82,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAssignmentsList() {
+    return Column(
+      children: [
+        _buildAssignmentItem(
+            'Maths Quiz', 'Due tomorrow', Icons.quiz_rounded, Colors.purple),
+        const SizedBox(height: 12),
+        _buildAssignmentItem(
+            'Physics Lab', 'Due in 3 days', Icons.biotech_rounded, Colors.blue),
+      ],
+    );
+  }
+
+  Widget _buildAssignmentItem(
+      String title, String due, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment:
-            center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title,
-                  style: TextStyle(
-                      color: text, fontWeight: FontWeight.bold, fontSize: 14)),
-              Icon(icon, color: AppColors.textSecondary, size: 18),
-            ],
-          ),
-          const SizedBox(height: 16),
-          if (child != null) child,
-          if (center) const SizedBox(height: 8),
-          if (center)
-            Text(subtitle,
-                style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRecentActivity() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Recent Activity',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textMain),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Text('See all',
-                  style: TextStyle(
-                      color: AppColors.primaryAction,
-                      fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        _buildActivityItem('Chemistry Notes', 'Organic Compounds',
-            Icons.menu_book, AppColors.accentBlue),
-        const SizedBox(height: 12),
-        _buildActivityItem('Calculus Video', 'Integration Basics',
-            Icons.play_circle_outline, AppColors.accentPurple),
-        const SizedBox(height: 12),
-        _buildActivityItem('History Quiz', 'World War II',
-            Icons.assignment_outlined, AppColors.accentOrange),
-      ],
-    );
-  }
-
-  Widget _buildActivityItem(
-      String title, String subtitle, IconData icon, Color accent) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
-          ),
-        ],
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: accent.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: accent, size: 24),
+            child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -421,23 +257,18 @@ class ModernHomeScreen extends StatelessWidget {
               children: [
                 Text(title,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textMain)),
-                Text(subtitle,
-                    style: TextStyle(
+                        color: AppColors.textMain,
+                        fontWeight: FontWeight.bold)),
+                Text(due,
+                    style: const TextStyle(
                         color: AppColors.textSecondary, fontSize: 12)),
               ],
             ),
           ),
-          Icon(Icons.chevron_right,
-              color: AppColors.textSecondary.withOpacity(0.5)),
+          const Icon(Icons.chevron_right_rounded,
+              color: AppColors.textSecondary),
         ],
       ),
     );
   }
-}
-
-// Helper class for rounded rectangle analysis (fix typo in my head)
-class RoundedRectangleAnalysis extends RoundedRectangleBorder {
-  const RoundedRectangleAnalysis({super.borderRadius, super.side});
 }

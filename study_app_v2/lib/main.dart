@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:study_app/screens/home_dashboard_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:study_app/screens/onboarding_screen.dart';
 import 'package:study_app/theme/app_theme.dart';
 
 void main() {
-  runApp(const PadhLeApp());
+  runApp(
+    const ProviderScope(
+      child: StudyApp(),
+    ),
+  );
 }
 
-class PadhLeApp extends StatelessWidget {
-  const PadhLeApp({super.key});
+class StudyApp extends StatelessWidget {
+  const StudyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PadhLe V2',
+      title: 'Study App',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      themeMode:
-          ThemeMode.light, // Default to light for the premium yellowish look
-      home: const HomeDashboardScreen(),
+      theme: AppTheme.dark(),
+      home: const OnboardingScreen(),
     );
   }
 }

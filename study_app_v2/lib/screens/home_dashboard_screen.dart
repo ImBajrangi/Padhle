@@ -1,71 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:study_app/screens/beginner_home_screen.dart';
-import 'package:study_app/screens/modern_home_screen.dart';
-import 'package:study_app/theme/app_theme.dart';
-import 'package:study_app/widgets/premium_effects.dart';
-import 'dart:ui';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../theme/app_theme.dart';
+import '../widgets/premium_effects.dart';
+import '../widgets/glass_bottom_bar.dart';
+import '../providers/user_prefs_provider.dart';
+import 'library_vault_screen.dart';
+import 'modern_home_screen.dart';
 
-class HomeDashboardScreen extends StatefulWidget {
+class HomeDashboardScreen extends ConsumerStatefulWidget {
   const HomeDashboardScreen({super.key});
 
   @override
-  State<HomeDashboardScreen> createState() => _HomeDashboardScreenState();
+  ConsumerState<HomeDashboardScreen> createState() =>
+      _HomeDashboardScreenState();
 }
 
-class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
-  bool _isModern = true;
+class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
   int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const ModernHomeScreen(),
+    const LibraryVaultScreen(),
+    const Scaffold(body: Center(child: Text('Statistics'))),
+    const Scaffold(body: Center(child: Text('Profile'))),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final userPrefs = ref.watch(userPrefsProvider);
+
     return Scaffold(
+      backgroundColor: AppColors.bgDark,
       extendBody: true,
       body: Stack(
         children: [
-          const GrainyTextureOverlay(opacity: 0.03),
-          _isModern ? const ModernHomeScreen() : const BeginnerHomeScreen(),
-          _buildFloatingModeToggle(),
-          _buildGlassNavbar(),
+          IndexedStack(
+            index: _currentIndex,
+            children: _screens,
+          ),
+          _buildFloatingModeToggle(userPrefs.isModernMode),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        shape: const CircleBorder(),
+        elevation: 10,
+        child: const Icon(Icons.add_rounded, size: 32),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: GlassBottomBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     );
   }
 
-  Widget _buildFloatingModeToggle() {
+  Widget _buildFloatingModeToggle(bool isModern) {
     return Positioned(
       top: 60,
       right: 24,
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            _isModern = !_isModern;
-          });
+          ref.read(userPrefsProvider.notifier).toggleModernMode();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content:
-                  Text('Switched to ${_isModern ? 'Modern' : 'Beginner'} Mode'),
+                  Text('Switched to ${!isModern ? 'Modern' : 'Beginner'} Mode'),
               duration: const Duration(seconds: 1),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
-              backgroundColor: AppColors.textMain,
+              backgroundColor: AppColors.surface,
             ),
           );
         },
         child: PremiumGlassContainer(
           blur: 10,
-          opacity: 0.2,
+          opacity: 0.1,
           borderRadius: BorderRadius.circular(20),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(_isModern ? Icons.bolt : Icons.auto_awesome,
+                Icon(isModern ? Icons.bolt : Icons.auto_awesome,
                     color: AppColors.primary, size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  _isModern ? 'MODERN' : 'BEGINNER',
+                  isModern ? 'MODERN' : 'BEGINNER',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 10,
@@ -75,62 +103,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGlassNavbar() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 90,
-        margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-        child: PremiumGlassContainer(
-          blur: 15,
-          opacity: 0.1,
-          borderRadius: BorderRadius.circular(28),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(0, Icons.home_rounded, 'Home'),
-              _buildNavItem(1, Icons.search_rounded, 'Search'),
-              const SizedBox(width: 40),
-              _buildNavItem(2, Icons.folder_open_rounded, 'Library'),
-              _buildNavItem(3, Icons.person_rounded, 'Profile'),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    bool isActive = _currentIndex == index;
-    return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
-      child: Container(
-        color: Colors.transparent,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color:
-                  isActive ? AppColors.primaryAction : AppColors.textSecondary,
-              size: 26,
-            ),
-            if (isActive)
-              Container(
-                margin: const EdgeInsets.only(top: 4),
-                width: 4,
-                height: 4,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryAction,
-                  shape: BoxShape.circle,
-                ),
-              ),
-          ],
         ),
       ),
     );
