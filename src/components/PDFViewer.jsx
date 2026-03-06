@@ -52,16 +52,23 @@ export default function PDFViewer({ file, onClose }) {
 
                     <div className="canvas-wrapper">
                         {viewer.isLoading && <Loader />}
-                        <PDFCanvas
-                            canvasRef={viewer.canvasRef}
-                            textLayerRef={viewer.textLayerRef}
-                            pageNum={viewer.pageNum}
-                            totalPages={viewer.totalPages}
-                            prevPage={viewer.prevPage}
-                            nextPage={viewer.nextPage}
-                            pdfLoaded={viewer.pdfLoaded}
-                            isFocusMode={viewer.isFocusMode}
-                        />
+                        {viewer.pdfLoaded ? (
+                            <PDFCanvas
+                                canvasRef={viewer.canvasRef}
+                                textLayerRef={viewer.textLayerRef}
+                                pageNum={viewer.pageNum}
+                                totalPages={viewer.totalPages}
+                                prevPage={viewer.prevPage}
+                                nextPage={viewer.nextPage}
+                                pdfLoaded={viewer.pdfLoaded}
+                                isFocusMode={viewer.isFocusMode}
+                            />
+                        ) : (
+                            <div className="viewer-empty-state">
+                                <div className="spinner-glow"></div>
+                                <p>Initializing Studio Reader...</p>
+                            </div>
+                        )}
                     </div>
 
                     <button className="close-viewer-btn" onClick={onClose} title="Close Reader">

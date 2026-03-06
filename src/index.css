@@ -3635,3 +3635,156 @@ main {
   transform: scale(1.02) !important;
   background: rgba(255, 255, 255, 0.2) !important;
 }
+/* ═══════════════════════════════════════════
+   MODERN PDF VIEWER OVERLAY (LIQUID GLASS)
+   ═══════════════════════════════════════════ */
+
+.pdf-viewer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  animation: viewerFadeIn 0.5s var(--ease-out);
+  overflow: hidden;
+}
+
+.pdf-viewer-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  filter: url(#glass-distortion);
+  opacity: 0.5;
+}
+
+@keyframes viewerFadeIn {
+  from { opacity: 0; transform: scale(1.02); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.viewer-container {
+  flex: 1;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+
+.main-viewer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-base);
+  border-left: 1px solid var(--border);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+}
+
+.canvas-wrapper {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: var(--bg-deep);
+  position: relative;
+}
+
+.canvas-wrapper .pdf-container {
+  min-height: auto;
+  flex: 0 0 auto;
+}
+
+.close-viewer-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 2010;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--glass-shadow);
+}
+
+.close-viewer-btn:hover {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  transform: rotate(90deg);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.close-viewer-btn:active {
+  transform: rotate(90deg) scale(0.92);
+}
+
+/* Ensure sidebar and toolbar are visible in the new container */
+.viewer-container .sidebar {
+  position: relative;
+  height: 100%;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-right: 1px solid var(--border);
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.viewer-container .sidebar:not(.open) {
+  width: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+.viewer-container .toolbar {
+  display: flex !important;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-surface);
+  z-index: 5;
+}
+
+/* Adjustments for Liquid Glass elements in the viewer */
+.viewer-container .toolbar::before,
+.viewer-container .toolbar::after {
+  display: none; /* Already has its own glass feel via bg-surface + backdrop */
+}
+
+/* Focus mode adjustments for the new layout */
+.viewer-container.focus-mode .sidebar {
+  display: none;
+}
+
+.viewer-container.focus-mode .toolbar {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  padding: 0;
+}
+
+.viewer-container.focus-mode .canvas-wrapper {
+  padding: 0;
+}
