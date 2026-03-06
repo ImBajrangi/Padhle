@@ -37,7 +37,7 @@ export default function App() {
         <Background />
         
         {/* Main Glass Layout wrapper */}
-        <div className="liquid-glass-root" style={{ position: 'relative', zindex: 1 }}>
+        <div className="liquid-glass-root" style={{ position: 'relative', zIndex: 1 }}>
           <Navbar 
             onReaderClick={openReader} 
             pdfLoaded={viewer.pdfLoaded} 
