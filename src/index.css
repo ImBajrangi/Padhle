@@ -3497,3 +3497,65 @@ main {
     grid-template-columns: 1fr;
   }
 }
+/* --- LIQUID GLASS THEME --- */
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-tint: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shine: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.liquid-glass-card {
+  position: relative;
+  isolation: isolate;
+  background: var(--glass-bg);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  border: 1px solid var(--glass-border);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  filter: url(#glass-distortion);
+  border-radius: inherit;
+}
+
+.liquid-glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  box-shadow: var(--glass-shine);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.liquid-glass-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Enhancing existing bento cards if present */
+.bento-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  filter: url(#glass-distortion);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shine) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.bento-card:hover {
+  transform: scale(1.02) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
