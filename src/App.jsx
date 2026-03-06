@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
-import Navbar from './components/Navbar';
+import { useState, useRef } from 'react';
+import Header from './components/Header';
 import LandingPage from './components/LandingPage';
 import usePdfViewer from './hooks/usePdfViewer';
 import PDFViewer from './components/PDFViewer';
 import ErrorModal from './components/ErrorModal';
 import Background from './components/Background';
+
 import Marketplace from './components/Marketplace';
 import About from './components/About';
 import Footer from './components/Footer';
@@ -12,7 +13,7 @@ import Footer from './components/Footer';
 export default function App() {
   const fileInputRef = useRef(null);
   const viewer = usePdfViewer();
-  const [view, setView] = useState('landing');
+  const [view, setView] = useState('landing'); // 'landing', 'marketplace', 'viewer'
 
   const handleStartLearning = () => {
     setView('marketplace');
@@ -31,27 +32,37 @@ export default function App() {
     }
   };
 
+  // ── View Rendering ──
+
+  if (view === 'landing') {
+    return (
+      <div className="light-theme">
+        <LandingPage onStartLearning={handleStartLearning} />
+      </div>
+    );
+  }
+
   return (
     <div className={viewer.isDark ? 'dark-theme' : 'light-theme'}>
       <div className="app-container" style={{ position: 'relative', minHeight: '100vh' }}>
         <Background />
-        
-        {/* Main Glass Layout wrapper */}
-        <div className="liquid-glass-root" style={{ position: 'relative', zIndex: 1 }}>
-          <Navbar 
-            onReaderClick={openReader} 
-            pdfLoaded={viewer.pdfLoaded} 
-            setView={setView} 
-            currentView={view} 
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <Header
+            fileName={viewer.fileName}
+            isDark={viewer.isDark}
+            toggleTheme={viewer.toggleTheme}
+            onOpenFile={() => fileInputRef.current?.click()}
+            currentView={view}
+            setView={setView}
           />
 
-          <main className="content-area">
-            {view === 'landing' && <LandingPage onStartLearning={handleStartLearning} />}
-            {view === 'marketplace' && <Marketplace onFileSelect={handleFileSelect} />}
+          <main>
+            {view === 'marketplace' && <Marketplace onOpenReader={openReader} />}
             {view === 'viewer' && (
-              <PDFViewer 
-                file={viewer.selectedFile} 
-                onClose={() => setView('marketplace')} 
+              <PDFViewer
+                file={viewer.selectedFile}
+                onClose={() => setView('marketplace')}
               />
             )}
             {view === 'about' && <About />}
