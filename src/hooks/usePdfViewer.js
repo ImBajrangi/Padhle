@@ -7,7 +7,14 @@ export default function usePdfViewer() {
     const [pdfDoc, setPdfDoc] = useState(null);
     const [pageNum, setPageNum] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [scale, setScale] = useState(1.0);
+    const getInitialScale = () => {
+        const width = window.innerWidth;
+        if (width < 480) return 0.55;
+        if (width < 768) return 0.75;
+        if (width < 1024) return 0.9;
+        return 1.0;
+    };
+    const [scale, setScale] = useState(getInitialScale());
     const [rotation, setRotation] = useState(0);
     const [fileName, setFileName] = useState('No file selected');
     const [isLoading, setIsLoading] = useState(false);

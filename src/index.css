@@ -789,7 +789,9 @@ main {
 
 .pdf-wrapper {
   position: relative;
-  display: inline-block;
+  display: block; /* Fix Safari flexbox collapse bug */
+  width: fit-content;
+  max-width: 100%;
   margin: 2rem auto;
   background: white;
   transform-style: preserve-3d;
@@ -877,6 +879,7 @@ main {
 
 #pdf-canvas {
   max-width: 100%;
+  height: auto !important; /* Retain aspect ratio when scaled */
   display: block;
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
