@@ -8,6 +8,18 @@ export default function Marketplace({ onOpenReader }) {
 
     const products = [
         {
+            id: 0,
+            name: 'Satsang Ke Bikhare Moti',
+            price: 'Free',
+            author: 'Spiritual Discourse Collection',
+            rating: 5.0,
+            sales: '15k',
+            category: 'Vedic Literature',
+            trending: true,
+            pdfUrl: '/pdfs/satsang-ke-bikhare-moti.pdf',
+            image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600'
+        },
+        {
             id: 1,
             name: 'Vector Calculus: Ultimate Studio Prep',
             price: '₹599',
@@ -16,6 +28,7 @@ export default function Marketplace({ onOpenReader }) {
             sales: '2.4k',
             category: 'Premium Kit',
             trending: true,
+            pdfUrl: 'https://tilimltxgeucefxzerqi.supabase.co/storage/v1/object/public/pdf/Clinical%20Ai%20Architecture%20Diagrams.pdf',
             image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=600'
         },
         {
@@ -65,7 +78,7 @@ export default function Marketplace({ onOpenReader }) {
                         <button className="elite-btn primary" onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}>
                             Shop Collection
                         </button>
-                        <button className="elite-btn secondary" onClick={onOpenReader}>
+                        <button className="elite-btn secondary" onClick={() => onOpenReader(null)}>
                             Try Demo Reader
                         </button>
                     </div>
@@ -109,7 +122,7 @@ export default function Marketplace({ onOpenReader }) {
                                 <div className="product-image">
                                     <img src={product.image} alt={product.name} loading="lazy" />
                                     <div className="overlay-actions">
-                                        <button className="action-circle" onClick={onOpenReader} title="Quick Preview">
+                                        <button className="action-circle" onClick={() => onOpenReader(product.pdfUrl || null)} title="Quick Preview">
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
                                         </button>
                                     </div>
@@ -129,9 +142,9 @@ export default function Marketplace({ onOpenReader }) {
                                     <div className="product-footer">
                                         <div className="price-tag">
                                             <span className="currency">INR</span>
-                                            <span className="val">{product.price.replace('₹', '')}</span>
+                                            <span className="val">{product.price.replace('₹', '').replace('Free', '0')}</span>
                                         </div>
-                                        <button className="unlock-btn">Unlock Now</button>
+                                        <button className="unlock-btn" onClick={() => onOpenReader(product.pdfUrl || null)}>Unlock Now</button>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +159,7 @@ export default function Marketplace({ onOpenReader }) {
                     <h4>Studio Reader Access</h4>
                     <p>Experience the most professional PDF viewer in the industry.</p>
                 </div>
-                <button className="primary-btn yellow-btn" style={{ gap: '0.6rem' }} onClick={onOpenReader}>
+                <button className="primary-btn yellow-btn" style={{ gap: '0.6rem' }} onClick={() => onOpenReader(null)}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>
                     <span>Activate Reader</span>
                 </button>

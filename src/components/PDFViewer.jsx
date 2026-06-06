@@ -9,14 +9,19 @@ import ErrorModal from './ErrorModal';
 export default function PDFViewer({ file, onClose }) {
     const viewer = usePdfViewer();
 
-    // Load the file when it changes or fall back to Supabase
+    // Load the file when it changes or fall back to Satsang Ke Bikhare Moti
     useEffect(() => {
         if (file) {
-            viewer.handleFileSelect(file);
+            if (typeof file === 'string') {
+                const friendlyName = file.split('/').pop().replace(/%20/g, ' ').replace('.pdf', '');
+                viewer.loadFromUrl(file, friendlyName);
+            } else {
+                viewer.handleFileSelect(file);
+            }
         } else {
-            // Default Supabase PDF for Demo Reader
-            const defaultPdfUrl = 'https://tilimltxgeucefxzerqi.supabase.co/storage/v1/object/public/pdf/Clinical%20Ai%20Architecture%20Diagrams.pdf';
-            viewer.loadFromUrl(defaultPdfUrl, 'Clinical AI Architecture');
+            // Default PDF for Demo Reader
+            const defaultPdfUrl = '/pdfs/satsang-ke-bikhare-moti.pdf';
+            viewer.loadFromUrl(defaultPdfUrl, 'Satsang Ke Bikhare Moti');
         }
     }, [file]);
 

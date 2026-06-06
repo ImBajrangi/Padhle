@@ -14,22 +14,31 @@ export default function App() {
   const fileInputRef = useRef(null);
   const viewer = usePdfViewer();
   const [view, setView] = useState('landing'); // 'landing', 'marketplace', 'viewer'
+  const [selectedPdf, setSelectedPdf] = useState(null);
 
   const handleStartLearning = () => {
     setView('marketplace');
   };
 
   const handleFileSelect = (file) => {
+    setSelectedPdf(file);
     viewer.handleFileSelect(file);
     setView('viewer');
   };
 
-  const openReader = () => {
-    if (viewer.pdfLoaded) {
-      setView('viewer');
+  const openReader = (pdf = null) => {
+    setSelectedPdf(pdf);
+    if (pdf) {
+      if (typeof pdf === 'string') {
+        const friendlyName = pdf.split('/').pop().replace(/%20/g, ' ').replace('.pdf', '');
+        viewer.loadFromUrl(pdf, friendlyName);
+      } else {
+        viewer.handleFileSelect(pdf);
+      }
     } else {
-      fileInputRef.current?.click();
+      viewer.loadFromUrl('/pdfs/satsang-ke-bikhare-moti.pdf', 'Satsang Ke Bikhare Moti');
     }
+    setView('viewer');
   };
 
   // ── View Rendering ──
@@ -61,7 +70,7 @@ export default function App() {
             {view === 'marketplace' && <Marketplace onOpenReader={openReader} />}
             {view === 'viewer' && (
               <PDFViewer
-                file={viewer.selectedFile}
+                file={selectedPdf}
                 onClose={() => setView('marketplace')}
               />
             )}
