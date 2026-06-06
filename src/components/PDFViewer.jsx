@@ -74,10 +74,7 @@ export default function PDFViewer({ file, onClose }) {
                                 isFocusMode={viewer.isFocusMode}
                             />
                         ) : (
-                            <div className="viewer-empty-state">
-                                <div className="spinner-glow"></div>
-                                <p>Initializing Studio Reader...</p>
-                            </div>
+                            <Loader text="Initializing Studio Reader..." />
                         )}
                     </div>
 

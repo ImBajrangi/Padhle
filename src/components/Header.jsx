@@ -79,17 +79,19 @@ export default function Header({ fileName, isDark, toggleTheme, onOpenFile, curr
                         </button>
                     </div>
                     <div className="divider"></div>
-                    <button
-                        className="icon-btn theme-toggle"
-                        onClick={toggleTheme}
-                        aria-label="Toggle theme"
-                    >
-                        {isDark ? (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>
-                        ) : (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-                        )}
-                    </button>
+                    <div className="theme-switch-container">
+                        <label className="switch" title="Toggle theme">
+                            <input checked={!isDark} onChange={toggleTheme} id="checkbox" type="checkbox" />
+                            <span className="slider">
+                                <span className="star star_1" />
+                                <span className="star star_2" />
+                                <span className="star star_3" />
+                                <svg viewBox="0 0 16 16" className="cloud_1 cloud">
+                                    <path transform="matrix(.77976 0 0 .78395-299.99-418.63)" fill="#fff" d="m391.84 540.91c-.421-.329-.949-.524-1.523-.524-1.351 0-2.451 1.084-2.485 2.435-1.395.526-2.388 1.88-2.388 3.466 0 1.874 1.385 3.423 3.182 3.667v.034h12.73v-.006c1.775-.104 3.182-1.584 3.182-3.395 0-1.747-1.309-3.186-2.994-3.379.007-.106.011-.214.011-.322 0-2.707-2.271-4.901-5.072-4.901-2.073 0-3.856 1.202-4.643 2.925" />
+                                </svg>
+                            </span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
