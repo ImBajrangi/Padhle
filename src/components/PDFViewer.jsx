@@ -20,7 +20,7 @@ export default function PDFViewer({ file, onClose }) {
             }
         } else {
             // Default PDF for Demo Reader
-            const defaultPdfUrl = '/pdfs/satsang-ke-bikhare-moti.pdf';
+            const defaultPdfUrl = 'https://dn720003.ca.archive.org/0/items/satsangke-bikhre-moti/Satsangke_Bikhre_Moti_339.pdf';
             viewer.loadFromUrl(defaultPdfUrl, 'Satsang Ke Bikhare Moti');
         }
     }, [file]);

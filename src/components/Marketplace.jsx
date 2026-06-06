@@ -16,7 +16,7 @@ export default function Marketplace({ onOpenReader }) {
             sales: '15k',
             category: 'Vedic Literature',
             trending: true,
-            pdfUrl: '/pdfs/satsang-ke-bikhare-moti.pdf',
+            pdfUrl: 'https://dn720003.ca.archive.org/0/items/satsangke-bikhre-moti/Satsangke_Bikhre_Moti_339.pdf',
             image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600'
         },
         {
