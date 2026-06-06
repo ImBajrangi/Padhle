@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>skillTadka | Modern & Authentic PDF Reader</title>
+  <meta name="description" content="A distraction-free, modern, and professional PDF viewer for digital books, spiritual, and Vedic literature. Read and download books seamlessly.">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+</head>
+<body class="theme-vedic">
+  
+  <!-- Library View -->
+  <main id="library-view" class="view-container">
+    <header class="app-header">
+      <div class="logo">
+        <span class="icon"><i class="fa-solid fa-leaf"></i></span>
+        <span class="brand-text">skillTadka</span>
+      </div>
+      <div class="header-actions">
+        <div class="theme-selector">
+          <button class="theme-btn active" data-theme="vedic" title="Vedic Theme"><i class="fa-solid fa-om"></i></button>
+          <button class="theme-btn" data-theme="slate" title="Slate Theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
+          <button class="theme-btn" data-theme="dark" title="Dark Theme"><i class="fa-solid fa-moon"></i></button>
+          <button class="theme-btn" data-theme="light" title="Light Theme"><i class="fa-solid fa-sun"></i></button>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Satsang Ke Bikhare Moti</h1>
+        <p>Explore divine teachings, spiritual books, and sacred literature in a premium, distraction-free environment designed for seekers and students.</p>
+        <div class="hero-buttons">
+          <a href="#book=satsang-ke-bikhare-moti" class="btn btn-primary"><i class="fa-solid fa-book-open"></i> Read Main Book</a>
+          <a href="pdfs/satsang-ke-bikhare-moti.pdf" download="satsang-ke-bikhare-moti.pdf" class="btn btn-secondary"><i class="fa-solid fa-download"></i> Download PDF</a>
+        </div>
+      </div>
+      
+      <!-- Feature Book Canvas Cover -->
+      <div class="featured-cover-container">
+        <div class="book-spine"></div>
+        <canvas id="featured-cover" class="book-cover-canvas"></canvas>
+        <div class="cover-overlay">
+          <span class="gold-badge"><i class="fa-solid fa-award"></i> Featured</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="library-grid-section">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-bookmark"></i> Digital Bookshelf</h2>
+        <p>Select a book to read instantly, download it, or add your own PDFs below.</p>
+      </div>
+
+      <div class="library-grid">
+        <!-- Main Featured Book Card -->
+        <article class="book-card" data-book-id="satsang-ke-bikhare-moti">
+          <div class="book-card-cover-wrapper">
+            <canvas class="card-cover-canvas" data-pdf-url="pdfs/satsang-ke-bikhare-moti.pdf"></canvas>
+            <div class="card-hover-actions">
+              <a href="#book=satsang-ke-bikhare-moti" class="btn btn-icon btn-read" title="Read Book"><i class="fa-solid fa-book-open"></i></a>
+              <a href="pdfs/satsang-ke-bikhare-moti.pdf" download="satsang-ke-bikhare-moti.pdf" class="btn btn-icon btn-download" title="Download"><i class="fa-solid fa-download"></i></a>
+            </div>
+          </div>
+          <div class="book-card-info">
+            <span class="book-badge">Vedic</span>
+            <h3>Satsang Ke Bikhare Moti</h3>
+            <p class="book-author">Spiritual Discourse Collection</p>
+            <div class="book-card-footer">
+              <span class="book-size"><i class="fa-solid fa-file-pdf"></i> 6.3 MB</span>
+              <a href="#book=satsang-ke-bikhare-moti" class="btn btn-text">Open Reader <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Dropzone Uploader Card -->
+        <div class="uploader-card" id="drop-zone">
+          <input type="file" id="file-input" accept="application/pdf" hidden>
+          <div class="uploader-content">
+            <div class="uploader-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <h3>Upload Custom PDF</h3>
+            <p>Drag & drop your PDF file here, or click to browse. File is stored securely in your browser cache.</p>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('file-input').click()"><i class="fa-solid fa-folder-open"></i> Browse Files</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Custom Books Section (Hidden by default, displayed if IndexedDB contains books) -->
+    <section class="library-grid-section custom-library-section" id="custom-library-section" style="display: none;">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-user-pen"></i> Your Uploaded Library</h2>
+        <p>Books uploaded by you, stored locally in IndexedDB.</p>
+      </div>
+      <div class="library-grid" id="custom-books-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <footer class="library-footer">
+      <div class="footer-divider"></div>
+      <p>&copy; 2026 skillTadka & Vrindopnishad. Bringing Vedic wisdom & modern tech together.</p>
+    </footer>
+  </main>
+
+  <!-- Reader View -->
+  <div id="reader-view" class="view-container" style="display: none;">
+    <!-- Reader Header Toolbar -->
+    <header class="reader-toolbar">
+      <div class="toolbar-left">
+        <a href="#" class="btn btn-back" title="Back to Library"><i class="fa-solid fa-chevron-left"></i> <span class="hide-mobile">Library</span></a>
+        <div class="toolbar-divider"></div>
+        <h2 id="document-title" class="doc-title">Loading PDF...</h2>
+      </div>
+
+      <div class="toolbar-center">
+        <!-- Page Navigation -->
+        <div class="page-nav-controls">
+          <button id="prev-page" class="btn btn-icon-sm" title="Previous Page"><i class="fa-solid fa-caret-left"></i></button>
+          <div class="page-input-container">
+            <input type="number" id="page-num" value="1" min="1" title="Current Page">
+            <span class="page-count-separator">/</span>
+            <span id="page-count">--</span>
+          </div>
+          <button id="next-page" class="btn btn-icon-sm" title="Next Page"><i class="fa-solid fa-caret-right"></i></button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- Zoom Controls -->
+        <div class="zoom-controls">
+          <button id="zoom-out" class="btn btn-icon-sm" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+          <select id="zoom-select" class="zoom-dropdown" title="Zoom Level">
+            <option value="auto">Automatic</option>
+            <option value="page-fit">Fit Page</option>
+            <option value="page-width">Fit Width</option>
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
+            <option value="1.0" selected>100%</option>
+            <option value="1.25">125%</option>
+            <option value="1.5">150%</option>
+            <option value="2.0">200%</option>
+            <option value="3.0">300%</option>
+          </select>
+          <button id="zoom-in" class="btn btn-icon-sm" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <!-- Layout Mode -->
+        <button id="view-mode-scroll" class="btn btn-icon-sm active" title="Continuous Scrolling"><i class="fa-solid fa-arrows-up-down"></i></button>
+        <button id="view-mode-single" class="btn btn-icon-sm" title="Single Page Mode"><i class="fa-solid fa-file"></i></button>
+        <button id="view-mode-dual" class="btn btn-icon-sm" title="Two-Page Mode"><i class="fa-solid fa-book-open"></i></button>
+        <button id="rotate-page" class="btn btn-icon-sm" title="Rotate Page"><i class="fa-solid fa-rotate-right"></i></button>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- Action Buttons -->
+        <button id="sidebar-toggle" class="btn btn-icon-sm" title="Toggle Sidebar"><i class="fa-solid fa-images"></i></button>
+        <button id="search-toggle" class="btn btn-icon-sm" title="Search Document"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button id="fullscreen-toggle" class="btn btn-icon-sm" title="Fullscreen Mode"><i class="fa-solid fa-expand"></i></button>
+        <a id="download-pdf" class="btn btn-icon-sm" title="Download PDF"><i class="fa-solid fa-download"></i></a>
+      </div>
+    </header>
+
+    <!-- Document Search Overlay (Hidden by Default) -->
+    <div id="search-overlay" class="search-overlay" style="display: none;">
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search in text...">
+        <button id="search-find-prev" class="btn btn-icon-sm" title="Find Previous"><i class="fa-solid fa-chevron-up"></i></button>
+        <button id="search-find-next" class="btn btn-icon-sm" title="Find Next"><i class="fa-solid fa-chevron-down"></i></button>
+        <span id="search-results-count" class="search-count">0 matches</span>
+        <button id="search-close" class="btn btn-icon-sm" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <!-- Main Workspace (Sidebar + PDF Render Area) -->
+    <div class="reader-workspace">
+      <!-- Sidebar -->
+      <aside id="reader-sidebar" class="reader-sidebar">
+        <div class="sidebar-tabs">
+          <button class="tab-btn active" data-tab="thumbnails"><i class="fa-solid fa-images"></i> Thumbnails</button>
+          <button class="tab-btn" data-tab="outline"><i class="fa-solid fa-list-ol"></i> Outline</button>
+        </div>
+        <div class="sidebar-content">
+          <div id="thumbnails-tab" class="tab-pane active">
+            <!-- Dynamic thumbnails will load here -->
+          </div>
+          <div id="outline-tab" class="tab-pane">
+            <ul id="outline-tree" class="outline-tree">
+              <!-- Dynamic chapters will load here -->
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- PDF Canvas Viewport Container -->
+      <div id="viewer-container" class="viewer-container">
+        <div id="pdf-viewer" class="pdf-viewer">
+          <!-- Dynamic rendered canvases will load here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global scripts -->
+  <script>
+    // Initialize PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+  </script>
+  <script src="js/app.js"></script>
+  <script src="js/viewer.js"></script>
+</body>
+</html>
