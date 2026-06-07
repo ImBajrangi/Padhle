@@ -69,16 +69,26 @@ export default function About() {
                 <div className="aurora-orb orb-lavender" style={{ '--mx': '20%', '--my': '20%' }}></div>
                 <div className="aurora-orb orb-gold" style={{ '--mx': '80%', '--my': '80%' }}></div>
 
-                <div className="about-content">
-                    <div className="status-pill floating">
-                        <Sparkles size={12} className="mr-2" />
-                        The Studio Standard
+                <div className="about-hero-inner">
+                    <div className="about-content">
+                        <div className="status-pill floating">
+                            <Sparkles size={12} className="mr-2" />
+                            The Studio Standard
+                        </div>
+                        <h2 className="about-title outline-text">skillTadka<br /><span className="solid-text">STUDIO</span></h2>
+                        <p className="about-subtitle">
+                            A masterclass in digital focus. We've stripped away the noise to engineer
+                            the world's most premium, private, and frictionless academic toolkit.
+                        </p>
                     </div>
-                    <h2 className="about-title outline-text">skillTadka<br /><span className="solid-text">STUDIO</span></h2>
-                    <p className="about-subtitle">
-                        A masterclass in digital focus. We've stripped away the noise to engineer
-                        the world's most premium, private, and frictionless academic toolkit.
-                    </p>
+
+                    <div className="about-holo-wrapper" aria-hidden="true">
+                        <div className="holo-logo">
+                            <div className="holo-layer holo-layer--back">ST</div>
+                            <div className="holo-layer holo-layer--mid">ST</div>
+                            <div className="holo-layer holo-layer--front">ST</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

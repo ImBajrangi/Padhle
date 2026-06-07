@@ -1,0 +1,79 @@
+.notfound-viewport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.notfound-content-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.notfound-bg-digits {
+  font-size: 12rem;
+  font-weight: 900;
+  color: var(--text-muted, #86868b);
+  opacity: 0.06;
+  user-select: none;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  position: absolute;
+  top: -20px;
+  z-index: 0;
+}
+
+.notfound-message {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-main, #ffffff);
+  margin-bottom: 2rem;
+  z-index: 1;
+  letter-spacing: -0.02em;
+}
+
+.notfound-home-btn {
+  background: var(--text-main, #ffffff);
+  color: var(--bg-base, #11111b);
+  border: 1px solid transparent;
+  padding: 12px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-pill, 9999px);
+  cursor: pointer;
+  z-index: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.notfound-home-btn:hover {
+  transform: translateY(-2px);
+  background-color: var(--primary, #f59e0b);
+  color: #000000;
+}
+
+.notfound-home-btn:active {
+  transform: scale(0.97);
+}
+
+.notfound-walker-wrap {
+  margin-top: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.notfound-walker-wrap .walker-loader {
+  scale: 0.75;
+}

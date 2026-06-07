@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:study_app/theme/app_theme.dart';
+import 'package:study_app/widgets/premium_effects.dart';
+import 'package:study_app/utils/sacred_styles.dart';
 import 'dart:ui';
 
 class ResourceDetailScreen extends StatelessWidget {
@@ -7,10 +9,13 @@ class ResourceDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       backgroundColor: Colors.black, // Base for the hero image
       body: Stack(
         children: [
+          const Positioned.fill(child: GrainyTextureOverlay(opacity: 0.02)),
           // 1. Hero Image Section (55% height)
           Positioned(
             top: 0,
@@ -112,16 +117,16 @@ class ResourceDetailScreen extends StatelessWidget {
           Positioned.fill(
             top: MediaQuery.of(context).size.height * 0.5,
             child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(32),
                     topRight: Radius.circular(32)),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black12,
+                      color: Colors.black.withValues(alpha: 0.15),
                       blurRadius: 40,
-                      offset: Offset(0, -10)),
+                      offset: const Offset(0, -10)),
                 ],
               ),
               child: SingleChildScrollView(
@@ -146,38 +151,55 @@ class ResourceDetailScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildDetailStat('24', 'Pages', Icons.description,
+                        _buildDetailStat(context, '24', 'Pages', Icons.description,
                             AppColors.primary),
-                        _buildDetailStat('4.2', 'MB Size', Icons.sd_storage,
+                        _buildDetailStat(context, '4.2', 'MB Size', Icons.sd_storage,
                             AppColors.accentBlue),
-                        _buildDetailStat('4.9', 'Rating', Icons.star,
+                        _buildDetailStat(context, '4.9', 'Rating', Icons.star,
                             AppColors.accentOrange),
                       ],
                     ),
                     const SizedBox(height: 40),
                     // CTA Button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 64,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.textMain,
-                          elevation: 8,
-                          shadowColor: AppColors.primary.withValues(alpha: 0.5),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32)),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.lock_open, size: 20),
-                            SizedBox(width: 12),
-                            Text('Unlock Full Access',
+                    BouncyButton(
+                      onTap: () {},
+                      child: PremiumShineEffect(
+                        child: Container(
+                          width: double.infinity,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            gradient: const SweepGradient(
+                              colors: [
+                                AppColors.primary,
+                                AppColors.secondary,
+                                AppColors.primary,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(32),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.4),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.lock_open_rounded, color: Colors.white, size: 22),
+                              SizedBox(width: 12),
+                              Text(
+                                'UNLOCK FULL ACCESS',
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
-                          ],
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -191,7 +213,7 @@ class ResourceDetailScreen extends StatelessWidget {
                         style: TextStyle(
                             color: AppColors.textSecondary, fontSize: 14)),
                     const SizedBox(height: 20),
-                    _buildLearnersRow(),
+                    _buildLearnersRow(context),
                     const SizedBox(height: 40),
                     // Tags
                     const Text('Topic Tags',
@@ -202,10 +224,10 @@ class ResourceDetailScreen extends StatelessWidget {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        _buildTag('#Kinematics'),
-                        _buildTag('#Dynamics'),
-                        _buildTag('#NewtonLaws'),
-                        _buildTag('#Energy'),
+                        _buildTag(context, '#Kinematics'),
+                        _buildTag(context, '#Dynamics'),
+                        _buildTag(context, '#NewtonLaws'),
+                        _buildTag(context, '#Energy'),
                       ],
                     ),
                   ],
@@ -220,7 +242,7 @@ class ResourceDetailScreen extends StatelessWidget {
 
   Widget _buildCircleAction(
       BuildContext context, IconData icon, VoidCallback onTap) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
@@ -242,81 +264,93 @@ class ResourceDetailScreen extends StatelessWidget {
   }
 
   Widget _buildDetailStat(
-      String value, String label, IconData icon, Color accent) {
-    return Container(
-      width: 100,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: AppColors.bgLight,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey[100]!),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: accent, size: 20),
-          const SizedBox(height: 8),
-          Text(value,
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 12, color: AppColors.textSecondary)),
-        ],
+      BuildContext context, String value, String label, IconData icon, Color accent) {
+    final theme = Theme.of(context);
+    return PremiumGlassContainer(
+      blur: 8,
+      opacity: 0.04,
+      borderRadius: BorderRadius.circular(24),
+      borderColor: accent.withValues(alpha: 0.15),
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          children: [
+            Icon(icon, color: accent, size: 24),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: SacredStyles.withColor(
+                SacredStyles.inter20Bold,
+                theme.colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label.toUpperCase(),
+              style: SacredStyles.withColor(
+                SacredStyles.mono10Bold,
+                theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildLearnersRow() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.bgLight,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: 110,
-            child: Stack(
-              children: [
-                _buildAvatar(0, 'https://i.pravatar.cc/100?u=1'),
-                _buildAvatar(28, 'https://i.pravatar.cc/100?u=2'),
-                _buildAvatar(56, 'https://i.pravatar.cc/100?u=3'),
-                Positioned(
-                  left: 84,
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.bgLight, width: 2),
+  Widget _buildLearnersRow(BuildContext context) {
+    return PremiumGlassContainer(
+      blur: 5,
+      opacity: 0.05,
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 110,
+              child: Stack(
+                children: [
+                  _buildAvatar(0, 'https://i.pravatar.cc/100?u=1'),
+                  _buildAvatar(28, 'https://i.pravatar.cc/100?u=2'),
+                  _buildAvatar(56, 'https://i.pravatar.cc/100?u=3'),
+                  Positioned(
+                    left: 84,
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Center(
+                          child: Text('+128',
+                              style: TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.bold))),
                     ),
-                    child: const Center(
-                        child: Text('+128',
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold))),
                   ),
-                ),
+                ],
+              ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _buildBar(16, AppColors.accentBlue.withValues(alpha: 0.3)),
+                const SizedBox(width: 4),
+                _buildBar(24, AppColors.accentBlue.withValues(alpha: 0.5)),
+                const SizedBox(width: 4),
+                _buildBar(12, AppColors.accentBlue.withValues(alpha: 0.3)),
+                const SizedBox(width: 4),
+                _buildBar(32, AppColors.accentBlue),
+                const SizedBox(width: 4),
+                _buildBar(40, AppColors.primary),
               ],
             ),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _buildBar(16, AppColors.accentBlue.withValues(alpha: 0.3)),
-              const SizedBox(width: 4),
-              _buildBar(24, AppColors.accentBlue.withValues(alpha: 0.5)),
-              const SizedBox(width: 4),
-              _buildBar(12, AppColors.accentBlue.withValues(alpha: 0.3)),
-              const SizedBox(width: 4),
-              _buildBar(32, AppColors.accentBlue),
-              const SizedBox(width: 4),
-              _buildBar(40, AppColors.primary),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -329,7 +363,7 @@ class ResourceDetailScreen extends StatelessWidget {
         height: 36,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.bgLight, width: 2),
+          border: Border.all(color: Colors.white, width: 2),
           image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover),
         ),
       ),
@@ -348,18 +382,24 @@ class ResourceDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTag(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(12),
+  Widget _buildTag(BuildContext context, String text) {
+    final theme = Theme.of(context);
+    return PremiumGlassContainer(
+      blur: 0,
+      opacity: 0.05,
+      borderRadius: BorderRadius.circular(12),
+      borderColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Text(
+          text,
+          style: SacredStyles.withColor(
+            SacredStyles.inter12.copyWith(fontWeight: FontWeight.w500),
+            theme.colorScheme.onSurface.withValues(alpha: 0.7),
+          ),
+        ),
       ),
-      child: Text(text,
-          style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 12,
-              fontWeight: FontWeight.w500)),
     );
   }
 }
+

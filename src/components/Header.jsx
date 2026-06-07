@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function Header({ fileName, isDark, toggleTheme, onOpenFile, currentView, setView }) {
+export default function Header({ fileName, isDark, toggleTheme, onOpenFile, currentView, setView, searchQuery = '', setSearchQuery = () => {} }) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
@@ -19,6 +19,21 @@ export default function Header({ fileName, isDark, toggleTheme, onOpenFile, curr
                 }
             };
         }
+    }, []);
+
+    // ⌘K Keyboard Shortcut Listener
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                const searchInput = document.querySelector('.aether-search-field__input input');
+                if (searchInput) {
+                    searchInput.focus();
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
     return (
@@ -47,19 +62,63 @@ export default function Header({ fileName, isDark, toggleTheme, onOpenFile, curr
                             Reader
                         </button>
                         <button
+                            className={`tab-btn ${currentView === 'stitch' ? 'active' : ''}`}
+                            onClick={() => setView('stitch')}
+                        >
+                            Stitch
+                        </button>
+                        <button
                             className={`tab-btn ${currentView === 'about' ? 'active' : ''}`}
                             onClick={() => setView('about')}
                         >
                             Info
                         </button>
                     </nav>
+                    {currentView === 'viewer' && fileName && (
+                        <div className="header-pdf-info" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '12px', paddingLeft: '12px', borderLeft: '1px solid var(--border)' }}>
+                            <span className="pdf-name" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={fileName}>
+                                {fileName}
+                            </span>
+                            <button 
+                                className="tab-btn" 
+                                onClick={onOpenFile}
+                                style={{ padding: '4px 8px', fontSize: '0.75rem', height: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                title="Open PDF File"
+                            >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+                                Open
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 <div className="header-center">
-                    <div className="search-bar">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                        <input type="text" placeholder="Search resources..." />
-                    </div>
+                    <label className="aether-search-field">
+                        <span className="aether-search-field__label" style={{ display: 'none' }}>Search</span>
+                        <span className="aether-search-field__input">
+                            <svg className="aether-search-field__icon" xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="m21 21-4.34-4.34" />
+                                <circle cx={11} cy={11} r={8} />
+                            </svg>
+                            <input 
+                                type="search" 
+                                placeholder="Search projects, files, people…" 
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            {searchQuery ? (
+                                <button 
+                                    onClick={() => setSearchQuery('')}
+                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px', color: 'var(--color-ink-tertiary)', display: 'flex', alignItems: 'center' }}
+                                    title="Clear Search"
+                                >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                </button>
+                            ) : (
+                                <kbd className="aether-search-field__kbd">⌘ K</kbd>
+                            )}
+                        </span>
+                    </label>
                 </div>
 
                 <div className="header-right">
@@ -98,10 +157,33 @@ export default function Header({ fileName, isDark, toggleTheme, onOpenFile, curr
             {/* Mobile Search Overlay */}
             <div className={`mobile-search-overlay ${isSearchOpen ? 'active' : ''}`}>
                 <div className="mobile-search-container">
-                    <div className="search-bar">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                        <input type="text" placeholder="Search resources..." autoFocus={isSearchOpen} />
-                    </div>
+                    <label className="aether-search-field" style={{ flex: 1 }}>
+                        <span className="aether-search-field__label" style={{ display: 'none' }}>Search</span>
+                        <span className="aether-search-field__input">
+                            <svg className="aether-search-field__icon" xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="m21 21-4.34-4.34" />
+                                <circle cx={11} cy={11} r={8} />
+                            </svg>
+                            <input 
+                                type="search" 
+                                placeholder="Search projects, files, people…" 
+                                autoFocus={isSearchOpen} 
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            {searchQuery ? (
+                                <button 
+                                    onClick={() => setSearchQuery('')}
+                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px', color: 'var(--color-ink-tertiary)' }}
+                                    title="Clear Search"
+                                >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                </button>
+                            ) : (
+                                <kbd className="aether-search-field__kbd">⌘ K</kbd>
+                            )}
+                        </span>
+                    </label>
                     <button className="icon-btn" onClick={() => setIsSearchOpen(false)}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                     </button>

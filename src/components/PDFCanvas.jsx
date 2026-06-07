@@ -1,54 +1,46 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import PDFPage from './PDFPage';
 
 export default function PDFCanvas({
-    canvasRef, textLayerRef, pageNum, totalPages, prevPage, nextPage, pdfLoaded, isFocusMode
+    pdfDoc, scale, rotation, renderPageToElements, searchText, goToPage, totalPages, pdfLoaded, isFocusMode, pageNum
 }) {
-    const [animClass, setAnimClass] = useState('');
-    const [prevPageNum, setPrevPageNum] = useState(pageNum);
+    const containerRef = useRef(null);
+    const lastTargetPageRef = useRef(pageNum);
 
+    // Scroll to page when pageNum changes from external controls (toolbar/sidebar)
     useEffect(() => {
-        if (pageNum > prevPageNum) {
-            setAnimClass('page-slide-next');
-        } else if (pageNum < prevPageNum) {
-            setAnimClass('page-slide-prev');
+        if (!containerRef.current) return;
+        
+        // Only scroll if pageNum is different from the page that was scrolled to
+        if (pageNum !== lastTargetPageRef.current) {
+            const pageElement = containerRef.current.querySelector(`[data-page-number="${pageNum}"]`);
+            if (pageElement) {
+                pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                lastTargetPageRef.current = pageNum;
+            }
         }
-        setPrevPageNum(pageNum);
+    }, [pageNum]);
 
-        const timer = setTimeout(() => setAnimClass(''), 300);
-        return () => clearTimeout(timer);
-    }, [pageNum, prevPageNum]);
+    if (!pdfLoaded || !pdfDoc) return null;
 
-    if (!pdfLoaded) return null;
+    const handlePageVisible = (num) => {
+        lastTargetPageRef.current = num;
+        goToPage(num);
+    };
 
     return (
-        <div className={`pdf-container ${isFocusMode ? 'focus-mode' : ''}`}>
-            <div className={`pdf-wrapper ${animClass}`}>
-                <canvas ref={canvasRef} id="pdf-canvas" />
-                <div ref={textLayerRef} className="text-layer" />
-            </div>
-
-            <div className="nav-arrows">
-                <button
-                    className="nav-arrow prev"
-                    onClick={prevPage}
-                    disabled={pageNum <= 1}
-                    title="Previous Page"
-                >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" /></svg>
-                </button>
-                <button
-                    className="nav-arrow next"
-                    onClick={nextPage}
-                    disabled={pageNum >= totalPages}
-                    title="Next Page"
-                >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-            </div>
-
-            <div className="keyboard-hint">
-                <span>←</span> Prev | <span>→</span> Next | <span>+/−</span> Zoom | <span>Z</span> Focus | <span>F</span> Fullscreen | <span>T</span> Theme
-            </div>
+        <div ref={containerRef} className={`pdf-container continuous-scroll ${isFocusMode ? 'focus-mode' : ''}`}>
+            {Array.from({ length: totalPages }, (_, i) => (
+                <PDFPage
+                    key={i + 1}
+                    pageNum={i + 1}
+                    scale={scale}
+                    rotation={rotation}
+                    renderPageToElements={renderPageToElements}
+                    searchText={searchText}
+                    onVisible={() => handlePageVisible(i + 1)}
+                />
+            ))}
         </div>
     );
 }

@@ -1,0 +1,63 @@
+[
+  {
+    "id": 0,
+    "name": "Satsang Ke Bikhare Moti",
+    "price": "Free",
+    "author": "Spiritual Discourse Collection",
+    "rating": 5.0,
+    "sales": "15k",
+    "category": "books",
+    "displayCategory": "Vedic Literature",
+    "trending": true,
+    "pdfUrl": "https://dn720003.ca.archive.org/0/items/satsangke-bikhre-moti/Satsangke_Bikhre_Moti_339.pdf",
+    "image": "https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=600"
+  },
+  {
+    "id": 1,
+    "name": "Vector Calculus: Ultimate Studio Prep",
+    "price": "₹599",
+    "author": "Mastery Series",
+    "rating": 4.8,
+    "sales": "2.4k",
+    "category": "gear",
+    "displayCategory": "Premium Kit",
+    "trending": true,
+    "pdfUrl": "/sample.pdf",
+    "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=600"
+  },
+  {
+    "id": 2,
+    "name": "Elite Productivity: Digital Workspace",
+    "price": "₹229",
+    "author": "MindFlow Studio",
+    "rating": 4.9,
+    "sales": "1.1k",
+    "category": "notes",
+    "displayCategory": "Digital Resource",
+    "new": true,
+    "image": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&q=80&w=600"
+  },
+  {
+    "id": 3,
+    "name": "Minimalist Physics Vol II: Optics",
+    "price": "₹849",
+    "author": "Pure Theory",
+    "rating": 4.7,
+    "sales": "850",
+    "category": "books",
+    "displayCategory": "Textbook",
+    "image": "https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&q=80&w=600"
+  },
+  {
+    "id": 4,
+    "name": "Frontend Mastery: React & Framer",
+    "price": "₹1,299",
+    "author": "Frontend Pro",
+    "rating": 5.0,
+    "sales": "420",
+    "category": "courses",
+    "displayCategory": "Video Course",
+    "trending": true,
+    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600"
+  }
+]

@@ -27,9 +27,14 @@ export default function Confetti({ trigger }) {
                 borderRadius: Math.random() > 0.5 ? '50%' : '2px',
             },
         }));
-        setParticles(newParticles);
+        const spawnTimer = setTimeout(() => {
+            setParticles(newParticles);
+        }, 0);
         const timer = setTimeout(() => setParticles([]), 1800);
-        return () => clearTimeout(timer);
+        return () => {
+            clearTimeout(spawnTimer);
+            clearTimeout(timer);
+        };
     }, [trigger]);
 
     if (!particles.length) return null;
